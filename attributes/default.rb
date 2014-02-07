@@ -17,6 +17,8 @@
 
 default['laravel']['project_root'] = "/srv"
 
+default['laravel']['database_driver'] = "mysql"
+default['laravel']['webserver'] = "apache2"
 default['laravel']['db']['name'] = "laraveldb"
 default['laravel']['db']['host'] = "localhost"
 default['laravel']['db']['user'] = "root"

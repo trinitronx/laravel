@@ -10,7 +10,9 @@ supports 'ubuntu'
 supports 'debian'
 
 depends "php"
+depends "nginx"
 depends "apache2"
+depends "postgresql"
 depends "mysql"
 depends "composer"
 

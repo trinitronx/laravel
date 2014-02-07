@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+    'default' => '<%= node['laravel']['database_driver'] %>',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -46,6 +46,19 @@ return array(
 
 	'connections' => array(
 
+<% case node['laravel']['datbase_driver'] %>
+<% when 'pgsql' %>
+       'pgsql' => array(
+           'driver'   => 'pgsql',
+		   'host'      => <%= "\'#{node['laravel']['db']['host']}\'" %>,
+		   'database'  => <%= "\'#{node['laravel']['db']['name']}\'" %>,
+		   'username'  => <%= "\'#{node['laravel']['db']['user']}\'" %>,
+		   'password'  => <%= "\'#{node['laravel']['db']['password']}\'" %>,
+           'charset'  => 'utf8',
+           'prefix'   => '',
+           'schema'   => 'public',
+        )
+<% when 'mysql' %>
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => <%= "\'#{node['laravel']['db']['host']}\'" %>,
@@ -56,6 +69,7 @@ return array(
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 		)
+<% end %>
 		
 	),
 

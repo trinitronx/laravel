@@ -36,7 +36,23 @@ unless File.exists?("#{node['php']['ext_conf_dir']}/mcrypt.ini")
 end
 
 
-include_recipe "mysql"
-include_recipe "apache2"
+case node['laravel']['database_driver']
+when 'mysql'
+  include_recipe "mysql"
+when 'pgsql'
+  include_recipe "postgresql::server"
+else
+  Chef::Log.fatal!("Database driver: #{node['laravel']['database_driver']} is not yet supported by this cookbook!")
+end
+
+case node['laravel']['webserver']
+when 'apache2'
+  include_recipe "apache2"
+when 'nginx'
+  include_recipe "nginx"
+else
+  Chef::Log.fatal!("Web Server: #{node['laravel']['webserver']} is not yet supported by this cookbook!")
+end
+
 include_recipe "composer"
 include_recipe "laravel::laravel"
