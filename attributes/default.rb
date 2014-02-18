@@ -21,5 +21,12 @@ default['laravel']['database_driver'] = "mysql"
 default['laravel']['webserver'] = "apache2"
 default['laravel']['db']['name'] = "laraveldb"
 default['laravel']['db']['host'] = "localhost"
-default['laravel']['db']['user'] = "root"
-default['laravel']['db']['pass'] = "#{node['mysql']['server_root_password']}"
+# default['laravel']['db']['user'] = "root"
+case node['laravel']['database_driver']
+when 'mysql'
+  default['laravel']['db']['user'] = "root"
+  default['laravel']['db']['pass'] = "#{node['mysql']['server_root_password']}"
+when 'pgsql'
+  default['laravel']['db']['user'] = "postgres"
+  default['laravel']['db']['pass'] = "#{node['postgresql']['password']['postgres']}"
+end

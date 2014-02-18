@@ -19,33 +19,60 @@
 # Laravel Database Node
 db = node['laravel']['db']
 
-include_recipe "mysql::client"
 ::Chef::Recipe.send(:include, Laravel::Helpers)
 path = project_path
 
+case node['laravel']['database_driver']
+when 'mysql'
+  include_recipe "mysql::client"
+  # Check if this is a development machine
+  if is_local_host? db['host']
+    include_recipe "mysql::server"
+    include_recipe "database::mysql"
 
-# Check if this is a development machine
-if is_local_host? db['host']
-  include_recipe "mysql::server"
+    db_connection_info = {
+      :host     => db['host'],
+      :username => 'root',
+      :password => node['mysql']['server_root_password']
+    }
+    db_provider = Chef::Provider::Database::Mysql
+    
+  end
+when 'pgsql'
+  include_recipe "postgresql::client"
+  # Check if this is a development machine
+  if is_local_host? db['host']
+    include_recipe "postgresql::server"
+    include_recipe "database::postgresql"
+    
+    db_connection_info = {
+      :host     => db['host'],
+      :port     => node['postgresql']['config']['port'],
+      :username => 'postgres',
+      :password => node['postgresql']['password']['postgres']
+    }
+    db_provider = Chef::Provider::Database::Postgresql
 
-  # Create the database is it does not already exist
-  execute "Create Laravel Database If Not Exists" do
-    action :run
-    command "mysql --user='#{db['user']}' --password='#{db['pass']}' --execute='CREATE DATABASE IF NOT EXISTS #{db['name']}'"
   end
 end
 
+# Create the database if it does not already exist
+database db['name'] do
+  connection db_connection_info
+  provider db_provider
+  action :create
+end
 
-# Create the database config file if one does not already exist
-# This is assumed to be during new project creation
-unless ::File.exist?("#{path}/app/config/database.php")
-  template "#{path}/app/config/database.php" do
-    mode "0644"
-  end
+# Control the database config file via Chef so that
+# settings can be configured per-environment (e.g.: dev, staging, prod)
+template "#{path}/app/config/database.php" do
+  mode "0644"
+end
 
-  # Create the migration table in the database
-  execute "Run Initial Migration" do
-    action :run
-    command "cd #{path}; php artisan migrate"
-  end
+# Create the migration table in the database
+# Note: This seems to be already idempotent, 
+#       but if a check exists, we should use the appropriate not_if shell guard
+execute "Run Initial Migration" do
+  action :run
+  command "cd #{path}; php artisan migrate"
 end
