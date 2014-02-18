@@ -26,6 +26,9 @@ unless missing_attrs.empty?
   " For more information, see https://github.com/BeattieM/laravel#attributes"
 end
 
+if platform_family?('debian')
+  include_recipe "apt"
+end
 
 include_recipe "php"
 
