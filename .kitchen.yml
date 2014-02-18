@@ -1,0 +1,34 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 2048
+#  vm_hostname: kitchen
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-12.04
+  - name: debian-7.2.0
+
+suites:
+  - name: mysql
+    run_list: recipe[laravel]
+    attributes:
+      laravel:
+        database_driver: mysql
+        project_root: /srv
+        project_name: test-app
+      mysql:
+        server_root_password: rootpass
+        server_debian_password: debpass
+        server_repl_password: replpass
+  - name: pgsql
+    run_list: recipe[laravel]
+    attributes:
+      laravel:
+        database_driver: pgsql
+        project_name: test-app
+        project_root: /srv
+
