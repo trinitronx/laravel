@@ -9,7 +9,9 @@ version          "1.0.0"
 supports 'ubuntu'
 supports 'debian'
 
+depends "apt"
 depends "php"
+depends "php-mcrypt"
 depends "nginx"
 depends "apache2"
 depends "postgresql"
