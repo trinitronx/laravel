@@ -29,8 +29,7 @@ Vagrant.configure("2") do |config|
      "recipe[php-fpm]",
      "recipe[nginx]",
      "recipe[php]",
-     "recipe[composer]",
-     "recipe[singularity-stack]"
+     "recipe[composer]"
    ]
    end
 
