@@ -10,6 +10,7 @@ supports 'ubuntu'
 supports 'debian'
 
 depends "apt"
+depends "database"
 depends "php"
 depends "php-mcrypt"
 depends "nginx"
