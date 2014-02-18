@@ -42,8 +42,10 @@ end
 case node['laravel']['database_driver']
 when 'mysql'
   include_recipe "mysql"
+  include_recipe "php::module_mysql"
 when 'pgsql'
   include_recipe "postgresql::server"
+  include_recipe "php::module_pgsql"
 else
   Chef::Log.fatal!("Database driver: #{node['laravel']['database_driver']} is not yet supported by this cookbook!")
 end
@@ -51,6 +53,7 @@ end
 case node['laravel']['webserver']
 when 'apache2'
   include_recipe "apache2"
+  include_recipe "apache2::mod_php5"
 when 'nginx'
   include_recipe "nginx"
 else
