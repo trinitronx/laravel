@@ -46,30 +46,30 @@ return array(
 
 	'connections' => array(
 
-<% case node['laravel']['datbase_driver'] %>
-<% when 'pgsql' %>
+<% case node['laravel']['database_driver'] -%>
+<% when 'pgsql' -%>
        'pgsql' => array(
            'driver'   => 'pgsql',
 		   'host'      => <%= "\'#{node['laravel']['db']['host']}\'" %>,
 		   'database'  => <%= "\'#{node['laravel']['db']['name']}\'" %>,
 		   'username'  => <%= "\'#{node['laravel']['db']['user']}\'" %>,
-		   'password'  => <%= "\'#{node['laravel']['db']['password']}\'" %>,
+		   'password'  => <%= "\'#{node['laravel']['db']['pass']}\'" %>,
            'charset'  => 'utf8',
            'prefix'   => '',
            'schema'   => 'public',
         )
-<% when 'mysql' %>
+<% when 'mysql' -%>
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => <%= "\'#{node['laravel']['db']['host']}\'" %>,
 			'database'  => <%= "\'#{node['laravel']['db']['name']}\'" %>,
 			'username'  => <%= "\'#{node['laravel']['db']['user']}\'" %>,
-			'password'  => <%= "\'#{node['laravel']['db']['password']}\'" %>,
+			'password'  => <%= "\'#{node['laravel']['db']['pass']}\'" %>,
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 		)
-<% end %>
+<% end -%>
 		
 	),
 
