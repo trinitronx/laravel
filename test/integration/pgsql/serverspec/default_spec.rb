@@ -4,7 +4,7 @@ describe package('php') {
   it { should be_installed }
 }
 
-describe package('mysql') {
+describe package('postgresql-*') {
   it { should be_installed }
 }
 
@@ -16,21 +16,21 @@ describe port(80) do
   it { should be_listening }
 end
 
-describe port(3306) do
+describe port(5432) do
   it { should be_listening }
 end
 
-describe command('mysql -N -B --user="root" --password="rootpass" --execute="SHOW databases;"') do
-  it { should return_stdout /^laraveldb$/ }
+describe command('sudo su --login postgres --command=\'psql -t --command="SELECT datname FROM pg_database;"\'') do
+  it { should return_stdout /^\s+laraveldb$/ }
 end
 
 describe file('/srv/test-app/app/config/database.php') do
   it { should be_file }
-  its(:content) { should match /^\s+['"]default['"]\s+=>\s+['"]mysql['"],$/ }
-  its(:content) { should match /^\s+['"]driver['"]\s+=>\s+['"]mysql['"],$/ }
+  its(:content) { should match /^\s+['"]default['"]\s+=>\s+['"]pgsql['"],$/ }
+  its(:content) { should match /^\s+['"]driver['"]\s+=>\s+['"]pgsql['"],$/ }
   its(:content) { should match /^\s+['"]host['"]\s+=>\s+['"]localhost['"],$/ }
   its(:content) { should match /^\s+['"]database['"]\s+=>\s+['"]laraveldb['"],$/ }
-  its(:content) { should match /^\s+['"]username['"]\s+=>\s+['"]root['"],$/ }
+  its(:content) { should match /^\s+['"]username['"]\s+=>\s+['"]postgres['"],$/ }
   its(:content) { should match /^\s+['"]password['"]\s+=>\s+['"]rootpass['"],$/ }
 end
 

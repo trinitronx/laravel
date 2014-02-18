@@ -31,4 +31,6 @@ suites:
         database_driver: pgsql
         project_name: test-app
         project_root: /srv
-
+      postgresql:
+        password:
+          postgres: rootpass
