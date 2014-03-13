@@ -19,12 +19,21 @@
 ::Chef::Recipe.send(:include, Laravel::Helpers)
 path = project_path
 
-
-# Prepare Apache and Virt Host
-web_app "laravel" do
-  template "laravel.conf.erb"
-  docroot "#{path}/public"
-  server_name node['fqdn']
-  server_aliases node['fqdn']
-  enable true
+case node['laravel']['webserver']
+when 'apache'
+  # Prepare Apache and Virt Host
+  web_app "laravel" do
+    template "laravel.conf.erb"
+    docroot "#{path}/public"
+    server_name node['fqdn']
+    server_aliases node['fqdn']
+    enable true
+  end
+when 'nginx'
+  nginx_site "laravel" do
+    cookbook 'nginx'
+    docroot "#{path}/public"
+    server_name node['fqdn']
+    action :enable
+  end
 end
