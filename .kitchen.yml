@@ -34,3 +34,27 @@ suites:
       postgresql:
         password:
           postgres: rootpass
+  - name: nginx-mysql
+    run_list: recipe[laravel]
+    attributes:
+      laravel:
+        webserver: nginx
+        database_driver: mysql
+        project_root: /srv
+        project_name: test-app
+      mysql:
+        server_root_password: rootpass
+        server_debian_password: debpass
+        server_repl_password: replpass
+
+  - name: nginx-pgsql
+    run_list: recipe[laravel]
+    attributes:
+      laravel:
+        webserver: nginx
+        database_driver: pgsql
+        project_name: test-app
+        project_root: /srv
+      postgresql:
+        password:
+          postgres: rootpass
