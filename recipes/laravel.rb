@@ -27,6 +27,12 @@ else
   composer_command = "php composer"
 end
 
+# Set up the global composer config file if it's not already
+unless node['laravel']['config']['github-oauth']['github.com'].nil?
+  execute 'Setup Composer GitHub OAuth Token' do
+    command "#{composer_command} config -g github-oauth.github.com #{node['laravel']['config']['github-oauth']['github.com']}"
+  end
+end
 
 # Notify the user if they are creating a new project
 # We do this because creating a new project takes a while
