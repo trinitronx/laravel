@@ -10,8 +10,9 @@ supports 'ubuntu'
 supports 'debian'
 
 depends "apt"
+depends "now" # Needed this to avoid stale apt package cache errors due to database::postgresql & postgresql::ruby
 depends "database"
-depends "php"
+depends "php", ">= 1.3.14"
 depends "php-mcrypt"
 depends "nginx"
 depends "apache2"

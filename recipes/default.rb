@@ -3,6 +3,7 @@
 # Recipe:: default
 #
 # Copyright 2014, Michael Beattie
+# Copyright 2014, James Cuzella
 #
 # Licensed under the MIT License.
 # You may obtain a copy of the License at
@@ -26,8 +27,10 @@ unless missing_attrs.empty?
   " For more information, see https://github.com/BeattieM/laravel#attributes"
 end
 
-if platform_family?('debian')
-  include_recipe "apt"
+# Depending on platform version, Ensure we get php >= 5.4
+if node['platform'] == 'ubuntu' && node['platform_version'].to_f <= 12.04
+  Chef::Log.warn('A packaged version of PHP 5.4 is not available for Ubuntu versions <= 12.04... Building from source!')
+  node.set['php']['install_method'] = 'source'
 end
 
 include_recipe "php"
