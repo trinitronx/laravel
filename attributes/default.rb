@@ -19,7 +19,6 @@ default['laravel']['project_root'] = "/srv"
 
 default['laravel']['database_driver'] = "mysql"
 default['laravel']['webserver'] = "apache2"
-default['laravel']['config']['github-oauth']['github.com'] = nil
 default['laravel']['web']['server_name'] = node['fqdn']
 default['laravel']['db']['name'] = "laraveldb"
 default['laravel']['db']['host'] = "localhost"
