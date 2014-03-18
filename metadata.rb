@@ -11,14 +11,14 @@ supports 'debian'
 
 depends "apt"
 depends "now" # Needed this to avoid stale apt package cache errors due to database::postgresql & postgresql::ruby
-depends "database"
-depends "php", ">= 1.3.14"
-depends "php-mcrypt"
+depends "database", ">= 2.0.0"
+depends "php", ">= 1.4.6"
+depends "php-fpm"
 depends "nginx"
 depends "apache2"
-depends "postgresql"
+depends "postgresql", ">= 3.3.4"
 depends "mysql"
-depends "composer"
+depends "composer", ">= 0.0.7"
 
 recipe 'laravel', 'Installs and configures Laravel and additional modules.'
 recipe 'laravel::admin', "Installs and configures FrozenNode's Admin module."
