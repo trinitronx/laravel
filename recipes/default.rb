@@ -29,28 +29,20 @@ end
 
 # Depending on platform version, Ensure we get php >= 5.4
 if node['platform'] == 'ubuntu' && node['platform_version'].to_f <= 12.04
-  Chef::Log.warn('A packaged version of PHP 5.4 is not available for Ubuntu versions <= 12.04... Building from source!')
-  node.set['php']['install_method'] = 'source'
+  Chef::Log.warn('A packaged for PHP >= 5.4 is not available in official repos for Ubuntu versions <= 12.04... Adding ppa:ondrej/php5')
+  include_recipe "php::apt_ondrej_ppa"
 end
 
 include_recipe "php"
 
+# Fix https://github.com/composer/composer/issues/2092
+if node['platform'] == 'ubuntu' && node['platform_version'].to_f >= 13.10
+  package 'php5-json'
+end
 
 # Laravel requires mycrypt
 unless File.exists?("#{node['php']['ext_conf_dir']}/mcrypt.ini")
-	include_recipe "php-mcrypt"
-end
-
-
-case node['laravel']['database_driver']
-when 'mysql'
-  include_recipe "mysql"
-  include_recipe "php::module_mysql"
-when 'pgsql'
-  include_recipe "postgresql::server"
-  include_recipe "php::module_pgsql"
-else
-  Chef::Log.fatal!("Database driver: #{node['laravel']['database_driver']} is not yet supported by this cookbook!")
+	include_recipe "php::module_mcrypt"
 end
 
 case node['laravel']['webserver']
@@ -61,6 +53,15 @@ when 'nginx'
   include_recipe "nginx"
 else
   Chef::Log.fatal!("Web Server: #{node['laravel']['webserver']} is not yet supported by this cookbook!")
+end
+
+case node['laravel']['database_driver']
+when 'mysql'
+  include_recipe "php::module_mysql"
+when 'pgsql'
+  include_recipe "php::module_pgsql"
+else
+  Chef::Log.fatal!("Database driver: #{node['laravel']['database_driver']} is not yet supported by this cookbook!")
 end
 
 include_recipe "composer"
