@@ -28,32 +28,32 @@ when 'mysql'
   # Check if this is a development machine
   if is_local_host? db['host']
     include_recipe "mysql::server"
-    include_recipe "database::mysql"
+  end
 
-    db_connection_info = {
+  include_recipe "database::mysql"
+
+  db_connection_info = {
       :host     => db['host'],
       :username => 'root',
       :password => node['mysql']['server_root_password']
     }
-    db_provider = Chef::Provider::Database::Mysql
-    
-  end
+  db_provider = Chef::Provider::Database::Mysql
 when 'pgsql'
   include_recipe "postgresql::client"
   # Check if this is a development machine
   if is_local_host? db['host']
     include_recipe "postgresql::server"
-    include_recipe "database::postgresql"
-    
-    db_connection_info = {
+  end
+
+  include_recipe "database::postgresql"
+
+  db_connection_info = {
       :host     => db['host'],
       :port     => node['postgresql']['config']['port'],
       :username => 'postgres',
       :password => node['postgresql']['password']['postgres']
     }
-    db_provider = Chef::Provider::Database::Postgresql
-
-  end
+  db_provider = Chef::Provider::Database::Postgresql
 end
 
 # Create the database if it does not already exist
