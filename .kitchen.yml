@@ -6,10 +6,11 @@ driver:
 #  vm_hostname: kitchen
 
 provisioner:
-  name: chef_solo
+  name: chef_zero
 
 platforms:
   - name: ubuntu-12.04
+  - name: ubuntu-13.10
   - name: debian-7.2.0
 
 suites:
@@ -32,8 +33,14 @@ suites:
         project_name: test-app
         project_root: /srv
       postgresql:
+        version: 9.3
+#        enable_pgdg_apt: false
         password:
           postgres: rootpass
+        config:
+          ssl: false
+#          ssl_key_file: /etc/ssl/private/ssl-cert-snakeoil.key
+#          ssl_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
   - name: nginx-mysql
     run_list: recipe[laravel]
     attributes:
@@ -56,5 +63,11 @@ suites:
         project_name: test-app
         project_root: /srv
       postgresql:
+        version: 9.3
+#        enable_pgdg_apt: true
         password:
           postgres: rootpass
+        config:
+          ssl: false
+#          ssl_key_file: /etc/ssl/private/ssl-cert-snakeoil.key
+#          ssl_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
