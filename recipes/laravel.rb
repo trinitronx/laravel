@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# Composer needs git installed to check out repos
+package 'git'
 
 ::Chef::Recipe.send(:include, Laravel::Helpers)
 path = project_path
@@ -39,7 +41,6 @@ end
 unless ::File.directory?("#{path}")
   log "Creating #{node['laravel']['project_name']} ..."
 end
-
 
 # Create a new project if it does not already exist
 execute "Create Laravel Project" do
